@@ -117,26 +117,25 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
 
 
 def main(n, ref="sun"):
+    start_time = time.time()
     offset_momentum(BODIES[ref])
     report_energy()
-    advance(0.01, n)
-    report_energy()
+    with open("orbits_py.csv", "a") as fh:
+        fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
+        for i in range(int(sys.argv[1])):
+            for body, (r,v,m) in BODIES.items():
+                advance(0.01, n)
+                fh.write("{};{};{};{}\n".format(body, r[0], r[1], r[2]))
+        report_energy()
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
-        start_time = time.time()
-        with open("orbits.csv", "a") as fh:
-            fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
-            for i in range(int(sys.argv[1])):
-                for body, (r,v,m) in BODIES.items():
-                    main(i)
-                    fh.write("{};{};{};{}\n".format(body, r[0], r[1], r[2]))
-        print("--- %s seconds ---" % (time.time() - start_time))
+        main(int(sys.argv[1]))
         sys.exit(0)
     else:
         print(f"This is {sys.argv[0]}")
         print("Call this program with an integer as program argument")
         print("(to set the number of iterations for the n-body simulation).")
         sys.exit(1)
-
