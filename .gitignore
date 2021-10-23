@@ -1,4 +1,6 @@
 cmake-build-debug/*
 cmake-build-release/*
-orbits.csv
+orbits_py.csv
+orbits_cpp.csv
 REPORT.docx
+result from different codes.docx
