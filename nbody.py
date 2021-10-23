@@ -10,6 +10,7 @@
 # slightly modified by bmmeijers
 
 
+import time
 import sys
 from math import sqrt, pi as PI
 
@@ -101,7 +102,7 @@ def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
         e -= (m1 * m2) / ((dx * dx + dy * dy + dz * dz) ** 0.5)
     for (r, [vx, vy, vz], m) in bodies:
         e += m * (vx * vx + vy * vy + vz * vz) / 2.0
-    print("Energy: %.9f" % e)
+    # print("Energy: %.9f" % e)
 
 
 def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
@@ -124,14 +125,14 @@ def main(n, ref="sun"):
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
-
+        start_time = time.time()
         with open("orbits.csv", "a") as fh:
             fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
             for i in range(int(sys.argv[1])):
                 for body, (r,v,m) in BODIES.items():
                     main(i)
                     fh.write("{};{};{};{}\n".format(body, r[0], r[1], r[2]))
-
+        print("--- %s seconds ---" % (time.time() - start_time))
         sys.exit(0)
     else:
         print(f"This is {sys.argv[0]}")
