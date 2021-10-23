@@ -11,8 +11,11 @@
    slightly modified by bmmeijers
 */
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
+#include <math.h>
+
 
 
 // these values are constant and not allowed to be changed
@@ -248,8 +251,11 @@ int main(int argc, char **argv) {
         const unsigned int n = atoi(argv[1]);
         offset_momentum(state);
         std::cout << energy(state) << std::endl;
+
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
+            std::cout<<state[i].name<<std::endl;
+
         }
         std::cout << energy(state) << std::endl;
         return EXIT_SUCCESS;

@@ -9,7 +9,6 @@
 # modified by Andriy Misyura
 # slightly modified by bmmeijers
 
-# chenaged
 
 import sys
 from math import sqrt, pi as PI
@@ -26,6 +25,7 @@ def combinations(l):
 
 SOLAR_MASS = 4 * PI * PI
 DAYS_PER_YEAR = 365.24
+
 
 BODIES = {
     "sun": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], SOLAR_MASS),
@@ -124,10 +124,18 @@ def main(n, ref="sun"):
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
-        main(int(sys.argv[1]))
+
+        with open("orbits.csv", "a") as fh:
+            fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
+            for i in range(int(sys.argv[1])):
+                for body, (r,v,m) in BODIES.items():
+                    main(i)
+                    fh.write("{};{};{};{}\n".format(body, r[0], r[1], r[2]))
+
         sys.exit(0)
     else:
         print(f"This is {sys.argv[0]}")
         print("Call this program with an integer as program argument")
         print("(to set the number of iterations for the n-body simulation).")
         sys.exit(1)
+
