@@ -123,8 +123,8 @@ def main(n, ref="sun"):
     with open("orbits_py.csv", "a") as fh:
         fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
         for i in range(int(sys.argv[1])):
+            advance(0.01, n)
             for body, (r,v,m) in BODIES.items():
-                advance(0.01, n)
                 fh.write("{};{};{};{}\n".format(body, r[0], r[1], r[2]))
         report_energy()
         print("--- %s seconds ---" % (time.time() - start_time))
