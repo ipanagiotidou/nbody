@@ -251,7 +251,6 @@ int writeRecordToFile(std::string file_name, std::string name, double field_one,
     file.close();
     return 0;
 }
-
 int writeRecord2File(std::string file_name, std::string name, std::string field_one, std::string field_two, std::string field_three){
     std::ofstream file; // here we have an instance of ofstream
     file.open(file_name); //, std::ios_base::app);
@@ -259,7 +258,6 @@ int writeRecord2File(std::string file_name, std::string name, std::string field_
     file.close();
     return 0;
 }
-
 int main(int argc, char **argv) {
     if (argc != 2) {
         std::cout << "This is " << argv[0] << std::endl;
@@ -273,8 +271,8 @@ int main(int argc, char **argv) {
         // std::cout << energy(state) << std::endl;
 
         for (int i = 0; i < n; ++i) {
+            advance(state, 0.01);
             for (unsigned int j = 0; j < BODIES_COUNT; ++j) {
-                advance(state, 0.01);
                 //std::cout<<state[j].name<<std::endl;
                 writeRecordToFile("..\\orbits_cpp.csv", state[j].name, state[j].position.x, state[j].position.y, state[j].position.z);
             }
