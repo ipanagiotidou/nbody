@@ -21,6 +21,9 @@
 #include <vector>
 
 
+const clock_t begin_time = clock();
+
+
 // these values are constant and not allowed to be changed
 const double SOLAR_MASS = 4 * M_PI * M_PI;
 const double DAYS_PER_YEAR = 365.24;
@@ -245,15 +248,15 @@ body state[] = {
 
 
 int writeRecordToFile(std::string file_name, std::string name, double field_one, double field_two, double field_three){
-    std::ofstream file; // here we have an instance of ofstream
+    std::ofstream file;
     file.open(file_name, std::ios_base::app);
     file << name << ";" << field_one << ";" << field_two << ";" << field_three << std::endl;
     file.close();
     return 0;
 }
 int writeRecord2File(std::string file_name, std::string name, std::string field_one, std::string field_two, std::string field_three){
-    std::ofstream file; // here we have an instance of ofstream
-    file.open(file_name); //, std::ios_base::app);
+    std::ofstream file;
+    file.open(file_name);
     file << name << ";" << field_one << ";" << field_two << ";" << field_three << std::endl;
     file.close();
     return 0;
@@ -265,19 +268,21 @@ int main(int argc, char **argv) {
         std::cout << "(to set the number of iterations for the n-body simulation)." << std::endl;
         return EXIT_FAILURE;
     } else {
+        std::cout << energy(state) << std::endl;
         const unsigned int n = atoi(argv[1]);
         writeRecord2File("..\\orbits_cpp.csv", "name of the body", "position x", "position y", "position z");
         offset_momentum(state);
-        // std::cout << energy(state) << std::endl;
+        std::cout << energy(state) << std::endl;
 
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
             for (unsigned int j = 0; j < BODIES_COUNT; ++j) {
-                //std::cout<<state[j].name<<std::endl;
+                std::cout<<state[j].name<<std::endl;
                 writeRecordToFile("..\\orbits_cpp.csv", state[j].name, state[j].position.x, state[j].position.y, state[j].position.z);
             }
         }
-        // std::cout << energy(state) << std::endl;
+        std::cout << energy(state) << std::endl;
+        std::cout << "seconds:" << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
         return EXIT_SUCCESS;
     }
 }

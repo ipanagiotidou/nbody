@@ -14,6 +14,7 @@ import time
 import sys
 from math import sqrt, pi as PI
 
+start_time = time.time()
 
 def combinations(l):
     result = []
@@ -23,10 +24,8 @@ def combinations(l):
             result.append((l[x][0], l[x][1], l[x][2], y[0], y[1], y[2]))
     return result
 
-
 SOLAR_MASS = 4 * PI * PI
 DAYS_PER_YEAR = 365.24
-
 
 BODIES = {
     "sun": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], SOLAR_MASS),
@@ -73,25 +72,29 @@ PAIRS = tuple(combinations(SYSTEM))
 
 
 def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
-    for i in range(n):
-        for ([x1, y1, z1], v1, m1, [x2, y2, z2], v2, m2) in pairs:
-            dx = x1 - x2
-            dy = y1 - y2
-            dz = z1 - z2
-            dist = sqrt(dx * dx + dy * dy + dz * dz)
-            mag = dt / (dist * dist * dist)
-            b1m = m1 * mag
-            b2m = m2 * mag
-            v1[0] -= dx * b2m
-            v1[1] -= dy * b2m
-            v1[2] -= dz * b2m
-            v2[2] += dz * b1m
-            v2[1] += dy * b1m
-            v2[0] += dx * b1m
-        for (r, [vx, vy, vz], m) in bodies:
-            r[0] += dt * vx
-            r[1] += dt * vy
-            r[2] += dt * vz
+    with open("orbits_py.csv", "a") as fh:
+        fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
+        for i in range(n):
+            for ([x1, y1, z1], v1, m1, [x2, y2, z2], v2, m2) in pairs:
+                dx = x1 - x2
+                dy = y1 - y2
+                dz = z1 - z2
+                dist = sqrt(dx * dx + dy * dy + dz * dz)
+                mag = dt / (dist * dist * dist)
+                b1m = m1 * mag
+                b2m = m2 * mag
+                v1[0] -= dx * b2m
+                v1[1] -= dy * b2m
+                v1[2] -= dz * b2m
+                v2[2] += dz * b1m
+                v2[1] += dy * b1m
+                v2[0] += dx * b1m
+            for (r, [vx, vy, vz], m) in bodies:
+                r[0] += dt * vx
+                r[1] += dt * vy
+                r[2] += dt * vz
+            for body,(r, v, m) in BODIES.items():
+                fh.write("{};{};{};{}\n".format(body,r[0],r[1],r[2]))
 
 
 def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
@@ -102,7 +105,7 @@ def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
         e -= (m1 * m2) / ((dx * dx + dy * dy + dz * dz) ** 0.5)
     for (r, [vx, vy, vz], m) in bodies:
         e += m * (vx * vx + vy * vy + vz * vz) / 2.0
-    # print("Energy: %.9f" % e)
+    print("Energy: %.9f" % e)
 
 
 def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
@@ -117,22 +120,16 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
 
 
 def main(n, ref="sun"):
-    start_time = time.time()
     offset_momentum(BODIES[ref])
     report_energy()
-    with open("orbits_py.csv", "a") as fh:
-        fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
-        for i in range(int(sys.argv[1])):
-            advance(0.01, n)
-            for body, (r,v,m) in BODIES.items():
-                fh.write("{};{};{};{}\n".format(body, r[0], r[1], r[2]))
-        report_energy()
-        print("--- %s seconds ---" % (time.time() - start_time))
+    advance(0.01, n)
+    report_energy()
 
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         main(int(sys.argv[1]))
+        print("--- %s seconds ---" % (time.time() - start_time))
         sys.exit(0)
     else:
         print(f"This is {sys.argv[0]}")

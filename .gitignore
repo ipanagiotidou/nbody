@@ -2,5 +2,9 @@ cmake-build-debug/*
 cmake-build-release/*
 orbits_py.csv
 orbits_cpp.csv
+orbits_py_500.csv
+orbits_cpp_500.csv
+orbits_py_5000.csv
+orbits_cpp_5000.csv
 REPORT.docx
 result from different codes.docx
