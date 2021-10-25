@@ -119,12 +119,15 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
     v[2] = pz / m
 
 
+def print2file():
+    pass
+
+
 def main(n, ref="sun"):
     offset_momentum(BODIES[ref])
     report_energy()
     advance(0.01, n)
     report_energy()
-
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
