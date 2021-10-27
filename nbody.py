@@ -19,7 +19,7 @@ start_time = time.time()
 def combinations(l):
     result = []
     for x in range(len(l) - 1):
-        ls = l[x + 1 :]
+        ls = l[x + 1:]
         for y in ls:
             result.append((l[x][0], l[x][1], l[x][2], y[0], y[1], y[2]))
     return result
@@ -70,7 +70,6 @@ BODIES = {
 SYSTEM = tuple(BODIES.values())
 PAIRS = tuple(combinations(SYSTEM))
 
-
 def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
     with open("orbits_py.csv", "a") as fh:
         fh.write("name of the body;" + "position x;" + "position y;" + "position z\n")
@@ -96,7 +95,6 @@ def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
             for body,(r, v, m) in BODIES.items():
                 fh.write("{};{};{};{}\n".format(body,r[0],r[1],r[2]))
 
-
 def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
     for ((x1, y1, z1), v1, m1, (x2, y2, z2), v2, m2) in pairs:
         dx = x1 - x2
@@ -117,10 +115,6 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
     v[0] = px / m
     v[1] = py / m
     v[2] = pz / m
-
-
-def print2file():
-    pass
 
 
 def main(n, ref="sun"):

@@ -271,20 +271,23 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     } else {
         std::cout << energy(state) << std::endl;
+
         const unsigned int n = atoi(argv[1]);
         writeRecord2File("orbits_cpp.csv", "name of the body", "position x", "position y", "position z");
         offset_momentum(state);
-        std::cout << energy(state) << std::endl;
+
+//        std::cout << energy(state) << std::endl;
 
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
             for (unsigned int j = 0; j < BODIES_COUNT; ++j) {
-                std::cout<<state[j].name<<std::endl;
+//                std::cout<<state[j].name<<std::endl;
                 writeRecordToFile("orbits_cpp.csv", state[j].name, state[j].position.x, state[j].position.y, state[j].position.z);
             }
         }
+
         std::cout << energy(state) << std::endl;
-        std::cout << "seconds:" << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+        std::cout << "====== seconds:" << float(clock () - begin_time) /  CLOCKS_PER_SEC << " =====";
         return EXIT_SUCCESS;
     }
 }
